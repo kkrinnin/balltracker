@@ -48,8 +48,8 @@ for n in x:
         y_avg_sq = (y[i] - y[i+1]) ** 2
         avg_dis = (x_avg_sq + y_avg_sq) ** 0.5
         avg_time = ((t[i] + t[i+1]) / 2)
-        print(avg_time)
         speed = speed + [(avg_dis / avg_time)]
+        time = time + [avg_time]
         i = i + 1
 
 
