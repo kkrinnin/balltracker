@@ -38,20 +38,17 @@ t_scale.set(0)
 t_scale.pack()
 w.pack()
 
-i = 0 # counter for array
 speed = []
 time = []
 
-for n in x:
-    if i < n:
-        x_avg_sq = (x[i] - x[i+1]) ** 2
-        y_avg_sq = (y[i] - y[i+1]) ** 2
-        avg_dis = (x_avg_sq + y_avg_sq) ** 0.5
-        avg_time = ((t[i] + t[i+1]) / 2)
-        speed = speed + [(avg_dis / avg_time)]
-        time = time + [avg_time]
-        i = i + 1
-
+# calulates the velocity for points next to eachother
+for i in range(len(x)-1):
+    x_avg_sq = (x[i] - x[i+1]) ** 2
+    y_avg_sq = (y[i] - y[i+1]) ** 2
+    avg_dis = (x_avg_sq + y_avg_sq) ** 0.5
+    avg_time = ((t[i] + t[i+1]) / 2)
+    speed = speed + [(avg_dis / avg_time)]
+    time = time + [avg_time]
 
 # Set up velocity graph
 max_v = max(speed)
@@ -67,22 +64,13 @@ offset = min(time) - .01*(max(time)-min(time))
 v_scaler = h / max_v
 min_v = min(speed) - .5
 max_v = max(speed)
-
-print(speed)
-
 vel_dots = [(ii, (vel.create_oval((((ii-offset)*t_scaler)-r),max_v*v_scaler-((jj-min_v)*v_scaler+r),(((ii-offset)*t_scaler)+r),max_v*v_scaler-((jj-min_v)*v_scaler-r)))) for ii,jj in zip(time, speed)]
 
-
 #vel_dots = [(time, (vel.create_oval(((ii+offset)*t_scaler+r)*scale,(jj+r)*scale,((ii+offset)*t_scaler-r)*scale,(jj-r)*scale))) for ii,jj in zip(time, speed)]
-
 t_scale2 = Scale(vel_master, from_=0, to=t_max, length=scale_size, resolution=0.01, orient=HORIZONTAL)
 t_scale2.set(0)
 t_scale2.pack()
-
 vel.pack()
-
-
-
 
 # loop to show all icons before a time decided by the slider
 def show(display, dots, input_t):
@@ -92,10 +80,7 @@ def show(display, dots, input_t):
         else:
             display.itemconfigure(dot, state='hidden')
 
-
-
 # loop to show all icons before a time decided by the slider
-
 def show_vel(display, vel_dot, input_t):
     for t,dot in vel_dot:
         if t < input_t:
@@ -103,13 +88,11 @@ def show_vel(display, vel_dot, input_t):
         else:
             display.itemconfigure(dot, state='hidden')
 
-
 # update loop
 while True:
     w.update_idletasks()
     w.update()
     vel.update_idletasks()
     vel.update()
-    
     show(w, dots, t_scale.get())
     show_vel(vel, vel_dots, t_scale2.get())
